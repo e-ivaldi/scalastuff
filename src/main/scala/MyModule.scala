@@ -90,6 +90,13 @@ object MyModule {
       }
   }
 
+  //Exercise 3.5
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
+    case Nil => Nil
+    case h :: t if f(h) => dropWhile(t, f)
+    case h :: t => dropWhile(h :: t, f)
+  }
+
   def main(args: Array[String]): Unit = {
     println(formatResult("abs", -5, abs))
     println(formatResult("factorial", 5, factorial))
@@ -109,5 +116,8 @@ object MyModule {
     assert(drop(List(1, 2, 3), 2) == List(3))
     assert(drop(List(1, 2, 3), 3) == List())
     assert(drop(List(1, 2, 3), -1) == List(1, 2, 3))
+
+    assert(dropWhile(List(1, 2), (x: Int) => x % 2 == 0) == List(2))
+    assert(dropWhile(List(1, 2, 3, 4), (x: Int) => x < 2) == List(3, 4))
   }
 }
