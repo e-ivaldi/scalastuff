@@ -97,6 +97,13 @@ object MyModule {
     case h :: t => dropWhile(h :: t, f)
   }
 
+  //Exercise 3.6
+  def init[A](l: List[A]): List[A] = l match {
+    case Nil => Nil
+    case _ :: (_ :: Nil) => l
+    case h :: t => h :: t
+  }
+
   def main(args: Array[String]): Unit = {
     println(formatResult("abs", -5, abs))
     println(formatResult("factorial", 5, factorial))
@@ -119,5 +126,7 @@ object MyModule {
 
     assert(dropWhile(List(1, 2), (x: Int) => x % 2 == 0) == List(2))
     assert(dropWhile(List(1, 2, 3, 4), (x: Int) => x < 2) == List(3, 4))
+
+    assert(init(List(1, 2, 3, 4)) == List(1, 2, 3))
   }
 }
