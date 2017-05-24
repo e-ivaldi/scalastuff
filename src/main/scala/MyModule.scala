@@ -67,10 +67,17 @@ object MyModule {
   // Exercise 3.1 returns 3
 
   //Exercise 3.2
+  
   def removeFirstElement[A](l: List[A]): List[A] = l match {
     case Nil => Nil
-    case _ :: Nil => Nil
     case _ :: t => t
+  }
+
+  //Exercise 3.3
+  // Using the same idea, implement the function setHead for replacing the first element of a List with a different value.
+  def setHead[A](x: A, l: List[A]) = l match {
+    case Nil => List(x)
+    case _ :: t => x :: t
   }
 
   def main(args: Array[String]): Unit = {
@@ -80,8 +87,12 @@ object MyModule {
     val sorting = (x: Int, y: Int) => y > x;
     println(isSorted(Array(1, 2, 3, 4), sorting));
 
-    println(removeFirstElement(List(1,2,3,4,5)))
+    println(removeFirstElement(List(1, 2, 3, 4, 5)))
     println(removeFirstElement(List(1)))
     println(removeFirstElement(List()))
+
+    println(setHead(1, List()))
+    println(setHead(1, List(2)))
+    println(setHead(1, List(2,3)))
   }
 }
