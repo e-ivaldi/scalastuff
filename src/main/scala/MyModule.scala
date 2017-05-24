@@ -67,32 +67,26 @@ object MyModule {
   // Exercise 3.1 returns 3
 
   //Exercise 3.2
-
   def removeFirstElement[A](l: List[A]): List[A] = l match {
     case Nil => Nil
     case _ :: t => t
   }
 
   //Exercise 3.3
-  // Using the same idea, implement the function setHead for replacing the first element of a List with a different value.
   def setHead[A](x: A, l: List[A]) = l match {
     case Nil => List(x)
     case _ :: t => x :: t
   }
 
   //Exercise 3.4
-  def drop[A](l: List[A], n: Int): List[A] = {
-    @tailrec
-    def loop(l: List[A], n: Int): List[A] = n match {
-      case 0 => l
-      case _ =>
-        l match {
-          case Nil => Nil
-          case _ :: t => loop(t, n - 1)
-        }
-    }
-
-    loop(l, n)
+  @tailrec
+  def drop[A](l: List[A], n: Int): List[A] = n match {
+    case 0 => l
+    case _ =>
+      l match {
+        case Nil => Nil
+        case _ :: t => drop(t, n - 1)
+      }
   }
 
   def main(args: Array[String]): Unit = {
