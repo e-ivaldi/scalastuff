@@ -67,7 +67,7 @@ object MyModule {
   // Exercise 3.1 returns 3
 
   //Exercise 3.2
-  
+
   def removeFirstElement[A](l: List[A]): List[A] = l match {
     case Nil => Nil
     case _ :: t => t
@@ -80,19 +80,38 @@ object MyModule {
     case _ :: t => x :: t
   }
 
+  //Exercise 3.4
+  def drop[A](l: List[A], n: Int): List[A] = {
+    @tailrec
+    def loop(l: List[A], n: Int): List[A] = n match {
+      case 0 => l
+      case _ =>
+        l match {
+          case Nil => Nil
+          case _ :: t => loop(t, n - 1)
+        }
+    }
+
+    loop(l, n)
+  }
+
   def main(args: Array[String]): Unit = {
     println(formatResult("abs", -5, abs))
     println(formatResult("factorial", 5, factorial))
 
-    val sorting = (x: Int, y: Int) => y > x;
-    println(isSorted(Array(1, 2, 3, 4), sorting));
+    val asc = (x: Int, y: Int) => y > x
+    assert(isSorted(Array(1, 2, 3, 4), asc))
 
-    println(removeFirstElement(List(1, 2, 3, 4, 5)))
-    println(removeFirstElement(List(1)))
-    println(removeFirstElement(List()))
+    assert(removeFirstElement(List(1, 2, 3, 4, 5)) == List(2, 3, 4, 5))
+    assert(removeFirstElement(List(1)) == List())
+    assert(removeFirstElement(List()) == List())
 
-    println(setHead(1, List()))
-    println(setHead(1, List(2)))
-    println(setHead(1, List(2,3)))
+    assert(setHead(1, List()) == List(1))
+    assert(setHead(1, List(2)) == List(1))
+    assert(setHead(1, List(2, 3)) == List(1, 3))
+
+    assert(drop(List(), 100) == List())
+    assert(drop(List(1, 2, 3), 2) == List(3))
+    assert(drop(List(1, 2, 3), 3) == List())
   }
 }
