@@ -82,7 +82,8 @@ object MyModule {
   @tailrec
   def drop[A](l: List[A], n: Int): List[A] = n match {
     case 0 => l
-    case _ =>
+    case _ if n < 0 => l
+    case _ if n > 0 =>
       l match {
         case Nil => Nil
         case _ :: t => drop(t, n - 1)
@@ -107,5 +108,6 @@ object MyModule {
     assert(drop(List(), 100) == List())
     assert(drop(List(1, 2, 3), 2) == List(3))
     assert(drop(List(1, 2, 3), 3) == List())
+    assert(drop(List(1, 2, 3), -1) == List(1, 2, 3))
   }
 }
