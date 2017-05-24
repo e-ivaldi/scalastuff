@@ -64,6 +64,15 @@ object MyModule {
     a => f(g(a))
   }
 
+  // Exercise 3.1 returns 3
+
+  //Exercise 3.2
+  def removeFirstElement[A](l: List[A]): List[A] = l match {
+    case Nil => Nil
+    case _ :: Nil => Nil
+    case _ :: t => t
+  }
+
   def main(args: Array[String]): Unit = {
     println(formatResult("abs", -5, abs))
     println(formatResult("factorial", 5, factorial))
@@ -71,5 +80,8 @@ object MyModule {
     val sorting = (x: Int, y: Int) => y > x;
     println(isSorted(Array(1, 2, 3, 4), sorting));
 
+    println(removeFirstElement(List(1,2,3,4,5)))
+    println(removeFirstElement(List(1)))
+    println(removeFirstElement(List()))
   }
 }
