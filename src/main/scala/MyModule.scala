@@ -12,7 +12,7 @@ object MyModule {
       if (n <= 0) acc else go(n - 1, n * acc)
     }
 
-    go(n, 1);
+    go(n, 1)
   }
 
   // Exercise 2.1
@@ -20,12 +20,12 @@ object MyModule {
     @tailrec
     def go(n: Int, prev: Int, acc: Int): Int = {
       if (n == 0) {
-        return acc;
+        return prev
       }
-      go(n - 1, acc, prev + acc)
+      go(n, acc, prev + acc)
     }
 
-    go(n - 1, 0, 1);
+    go(n, 0, 1)
   }
 
   private def formatResult(name: String, n: Int, f: Int => Int): String = {
@@ -38,15 +38,15 @@ object MyModule {
     @tailrec
     def loop(n: Int): Boolean = {
       if (n >= as.length - 1) {
-        return true;
+        return true
       } else if (ordered(as(n), as(n + 1))) {
-        loop(n + 1);
+        loop(n + 1)
       } else {
-        return false;
+        return false
       }
     }
 
-    loop(0);
+    loop(0)
   }
 
   // Exercise 2.3
