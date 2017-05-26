@@ -94,15 +94,43 @@ object MyModule {
   def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
     case Nil => Nil
     case h :: t if f(h) => dropWhile(t, f)
-    case h :: t => dropWhile(h :: t, f)
+    case h :: t => h :: dropWhile(t, f)
   }
 
-  //Exercise 3.6
   def init[A](l: List[A]): List[A] = l match {
     case Nil => Nil
-    case _ :: (_ :: Nil) => l
-    case h :: t => h :: t
+    case _ :: _ :: Nil => l match {
+      case x :: _ => List(x)
+    }
+    case h :: t => h :: init(t)
   }
+
+  def sum(ints: List[Int]): Int = ints match {
+    case Nil => 0
+    case x :: xs => x + sum(xs)
+  }
+
+  def product(ds: List[Double]): Double = ds match {
+    case Nil => 1.0
+    case x :: xs => x * product(xs)
+  }
+
+  def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = as match {
+    case Nil => z
+    case x :: xs => f(x, foldRight(xs, z)(f))
+  }
+
+  def sum2(ints: List[Int]): Int = foldRight(ints, 0)((a, b) => a + b)
+
+  def product2(ints: List[Double]): Double = foldRight(ints, 1.0)((a, b) => a * b)
+
+  // Exercise 3.7
+  // It doesn't seem so
+  def product3(ints: List[Double]): Double =
+  foldRight(ints, 1.0)((a, b) => a match {
+    case 0.0 => println("nan"); Double.NaN
+    case _ => println("mul"); a * b
+  })
 
   def main(args: Array[String]): Unit = {
     println(formatResult("abs", -5, abs))
@@ -124,9 +152,11 @@ object MyModule {
     assert(drop(List(1, 2, 3), 3) == List())
     assert(drop(List(1, 2, 3), -1) == List(1, 2, 3))
 
-    assert(dropWhile(List(1, 2), (x: Int) => x % 2 == 0) == List(2))
-    assert(dropWhile(List(1, 2, 3, 4), (x: Int) => x < 2) == List(3, 4))
+    assert(dropWhile(List(1, 2), (x: Int) => x % 2 == 1) == List(2))
+    assert(dropWhile(List(1, 2, 3, 4), (x: Int) => x < 2) == List(2, 3, 4))
 
     assert(init(List(1, 2, 3, 4)) == List(1, 2, 3))
+
+    product3(List(1D, 2D, 3D, 0.0, 5D, 6D, 7D, 8D, 9D, 10D))
   }
 }
