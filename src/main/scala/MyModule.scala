@@ -279,7 +279,18 @@ object MyModule {
     concatenate(loop(as, List())(f))
   }
 
+  //Exercise 3.21
+  //Use flatMap to implement filter.
+  def filterWithFlatMap[A](as: List[A])(f: A => Boolean): List[A] = {
+    flatMap(as)((x: A) => f(x) match {
+      case false => List()
+      case true => List(x)
+    })
+  }
+
   def main(args: Array[String]): Unit = {
+
+    assert(filterWithFlatMap(List(1, 2, 3, 4))(a => a % 2 == 0) == List(2, 4))
 
     assert(flatMap(List(1, 2, 3))(i => List(i, i)) == List(1, 1, 2, 2, 3, 3))
 
