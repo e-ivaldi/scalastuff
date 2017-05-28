@@ -214,7 +214,7 @@ object MyModule {
   def plusOne(as: List[Int]): List[Int] = {
     @tailrec
     def loop(as: List[Int], res: List[Int]): List[Int] = as match {
-      case Nil => res.reverse
+      case Nil => reverse(res)
       case h :: t => loop(t, (h + 1) :: res)
     }
 
@@ -225,7 +225,24 @@ object MyModule {
     as.map(n => n + 1)
   }
 
+  //Exercise 3.17
+  // Write a function that turns each value in a List[Double] into a String.
+  // You can use the expression d.toString to convert some d: Double to a String.
+  def listOfDoubleToListOfString(as: List[Double]): List[String] = {
+    @tailrec
+    def loop(as: List[Double], res: List[String]): List[String] = as match {
+      case Nil => reverse(res)
+      case h :: t => loop(t, h.toString :: res)
+    }
+
+    loop(as, List())
+  }
+
   def main(args: Array[String]): Unit = {
+
+    assert(listOfDoubleToListOfString(List(0, 1)) == List("0.0", "1.0"))
+    assert(listOfDoubleToListOfString(List(0)) == List("0.0"))
+    assert(listOfDoubleToListOfString(List()) == List())
 
     assert(plusOneWithMap(List(0, 1)) == List(1, 2))
     assert(plusOneWithMap(List(0)) == List(1))
