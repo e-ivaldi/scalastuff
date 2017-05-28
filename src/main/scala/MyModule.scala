@@ -208,8 +208,24 @@ object MyModule {
     loop(as, List[A]())
   }
 
+  //Exercise 3.16
+  //  Write a function that transforms a list of integers by adding 1 to each element.
+  // (Reminder: this should be a pure function that returns a new List!)
+  def plusOne(as: List[Int]): List[Int] = {
+    @tailrec
+    def loop(as: List[Int], res: List[Int]): List[Int] = as match {
+      case Nil => res.reverse
+      case h :: t => loop(t, (h + 1) :: res)
+    }
+
+    loop(as, List())
+  }
 
   def main(args: Array[String]): Unit = {
+
+    assert(plusOne(List(0, 1)) == List(1, 2))
+    assert(plusOne(List(0)) == List(1))
+    assert(plusOne(List()) == List())
 
     assert(concatenate(List()) == List())
     assert(concatenate(List(List(), List(), List())) == List())
@@ -219,8 +235,8 @@ object MyModule {
     assert(append(List(), List(1)) == List(1))
     assert(append(List(1, 2, 3), List(4)) == List(1, 2, 3, 4))
 
-    assert(foldRightInTermsOfFoldLeft(List(1, 2, 3), List[Integer]())((a, b) => a :: b) == List[Integer](1, 2, 3))
-    assert(foldLeftInTermsOfFoldRight(List(1, 2, 3), List[Integer]())((a, b) => a :: b) == List[Integer](3, 2, 1))
+    assert(foldRightInTermsOfFoldLeft(List(1, 2, 3), List[Int]())((a, b) => a :: b) == List(1, 2, 3))
+    assert(foldLeftInTermsOfFoldRight(List(1, 2, 3), List[Int]())((a, b) => a :: b) == List(3, 2, 1))
 
     assert(reverse(List(1, 2, 3)) == List(3, 2, 1))
 
