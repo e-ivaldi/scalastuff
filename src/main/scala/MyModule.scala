@@ -189,14 +189,34 @@ object MyModule {
 
   //Exercise 3.14
   //Implement append in terms of either foldLeft or foldRight.
-  def append[A](l1: List[A], l2: List[A] ) : List[A] = {
-    foldRight(l1, l2)((a, b) => a::b)
+  def append[A](l1: List[A], l2: List[A]): List[A] = {
+    foldRight(l1, l2)((a, b) => a :: b)
   }
+
+  //Exercise 3.15
+  //Hard: Write a function that concatenates a list of lists into a single list.
+  // Its runtime should be linear in the total length of all lists.
+  // Try to use functions we have already defined.
+  def concatenate[A](as: List[List[A]]): List[A] = {
+    def loop[A](as: List[List[A]], res: List[A]): List[A] = as match {
+      case Nil => res
+      case x :: y :: z => loop(z, append(x, y))
+      case x :: Nil => append(res, x)
+    }
+
+    loop(as, List[A]())
+  }
+
 
   def main(args: Array[String]): Unit = {
 
+    assert(concatenate(List()) == List())
+    assert(concatenate(List(List(), List(), List())) == List())
+    assert(concatenate(List(List(), List(), List(1))) == List(1))
+    assert(concatenate(List(List(1, 2, 3), List(4, 5, 6), List(7, 8, 9))) == List(1, 2, 3, 4, 5, 6, 7, 8, 9))
+
     assert(append(List(), List(1)) == List(1))
-    assert(append(List(1,2,3), List(4)) == List(1,2,3,4))
+    assert(append(List(1, 2, 3), List(4)) == List(1, 2, 3, 4))
 
     assert(foldRightInTermsOfFoldLeft(List(1, 2, 3), List[Integer]())((a, b) => a :: b) == List[Integer](1, 2, 3))
     assert(foldLeftInTermsOfFoldRight(List(1, 2, 3), List[Integer]())((a, b) => a :: b) == List[Integer](3, 2, 1))
