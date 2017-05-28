@@ -266,8 +266,22 @@ object MyModule {
     loop(as, List())(f)
   }
 
+  //Exercise 3.20
+  //Write a function flatMap that works like map except that the function given will return a list instead of a single result,
+  // and that list should be inserted into the final resulting list. Here is its signature:
+  def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = {
+    @tailrec
+    def loop(as: List[A], res: List[B])(f: A => List[B]): List[List[B]] = as match {
+      case Nil => List(reverse(res))
+      case h :: t => loop(t, append(f(h), res))(f)
+    }
+
+    concatenate(loop(as, List())(f))
+  }
 
   def main(args: Array[String]): Unit = {
+
+    assert(flatMap(List(1, 2, 3))(i => List(i, i)) == List(1, 1, 2, 2, 3, 3))
 
     assert(filter(List(1, 2, 3, 4))(a => a % 2 == 0) == List(2, 4))
 
