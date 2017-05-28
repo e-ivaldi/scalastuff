@@ -148,18 +148,54 @@ object MyModule {
   }
 
   //Exercise 3.11
+  //Write sum, product, and a function to compute the length of a list using foldLeft.
   def sum3(ints: List[Int]): Int = foldLeft(ints, 0)((a, b) => a + b)
 
   def product3(ints: List[Double]): Double = foldLeft(ints, 1.0)((a, b) => a * b)
 
   //Exercise 3.12
+  //Write a function that returns the reverse of a list (given List(1,2,3) it returns List(3,2,1)).
+  // See if you can write it using a fold.
   def reverse[A](as: List[A]): List[A] = {
     foldLeft(as, List[A]())((a, b) => a :: b)
   }
 
+  //Exercise 3.13
+  //Hard: Can you write foldLeft in terms of foldRight?
+  // How about the other way around? Implementing foldRight via foldLeft is useful because
+  // it lets us implement foldRight tail-recursively,
+  // which means it works even for large lists without overflowing the stack.
+  def foldLeftInTermsOfFoldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = {
+    @tailrec
+    def loop(as: List[A], res: List[A]): B = as match {
+      case Nil => foldRight(res, z)(f)
+      case h :: t => loop(t, h :: res)
+    }
+
+    loop(as, List[A]())
+    // or foldRight(as.reverse, z)(f)
+  }
+
+  def foldRightInTermsOfFoldLeft[A, B](as: List[A], z: B)(f: (A, B) => B): B = {
+    @tailrec
+    def loop(as: List[A], res: List[A]): B = as match {
+      case Nil => foldLeft(res, z)(f)
+      case h :: t => loop(t, h :: res)
+    }
+
+    loop(as, List[A]())
+    // or foldLeft(as.reverse, z)(f)
+  }
+
+  //Exercise 3.14
+  //Implement append in terms of either foldLeft or foldRight.
+
   def main(args: Array[String]): Unit = {
 
-    assert(reverse(List(1, 2,3)) == List(3,2,1))
+    assert(foldRightInTermsOfFoldLeft(List(1, 2, 3), List[Integer]())((a, b) => a :: b) == List[Integer](1, 2, 3))
+    assert(foldLeftInTermsOfFoldRight(List(1, 2, 3), List[Integer]())((a, b) => a :: b) == List[Integer](3, 2, 1))
+
+    assert(reverse(List(1, 2, 3)) == List(3, 2, 1))
 
     assert(foldLeft(List(), 0)((_, b) => b) == 0)
     assert(foldLeft(List(1), 0)((a, b) => a + b) == 1)
