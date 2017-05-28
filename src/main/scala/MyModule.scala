@@ -198,6 +198,7 @@ object MyModule {
   // Its runtime should be linear in the total length of all lists.
   // Try to use functions we have already defined.
   def concatenate[A](as: List[List[A]]): List[A] = {
+    @tailrec
     def loop[A](as: List[List[A]], res: List[A]): List[A] = as match {
       case Nil => res
       case x :: y :: z => loop(z, append(x, y))
