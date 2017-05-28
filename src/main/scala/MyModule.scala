@@ -288,7 +288,21 @@ object MyModule {
     })
   }
 
+  //Exercise 3.22
+  //Write a function that accepts two lists and constructs a new list by adding corresponding elements.
+  // For example, List(1,2,3) and List(4,5,6) become List(5,7,9).
+  def sumLists(l1: List[Int], l2: List[Int]): List[Int] = {
+    def loop(l1: List[Int], l2: List[Int], res: List[Int]): List[Int] = (l1, l2) match {
+      case (Nil, Nil) => reverse(res)
+      case (h1 :: t1, h2 :: t2) => loop(t1, t2, (h1 + h2) :: res)
+    }
+
+    loop(l1, l2, List())
+  }
+
   def main(args: Array[String]): Unit = {
+
+    assert(sumLists(List(1, 2, 3), List(4, 5, 6)) == List(5, 7, 9))
 
     assert(filterWithFlatMap(List(1, 2, 3, 4))(a => a % 2 == 0) == List(2, 4))
 
