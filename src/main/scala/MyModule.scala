@@ -221,7 +221,15 @@ object MyModule {
     loop(as, List())
   }
 
+  def plusOneWithMap(as: List[Int]): List[Int] = {
+    as.map(n => n + 1)
+  }
+
   def main(args: Array[String]): Unit = {
+
+    assert(plusOneWithMap(List(0, 1)) == List(1, 2))
+    assert(plusOneWithMap(List(0)) == List(1))
+    assert(plusOneWithMap(List()) == List())
 
     assert(plusOne(List(0, 1)) == List(1, 2))
     assert(plusOne(List(0)) == List(1))
