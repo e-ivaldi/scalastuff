@@ -242,7 +242,7 @@ object MyModule {
   //Write a function map that generalizes modifying each element in a list
   // while maintaining the structure of the list. Here is its signature:[12]
   //In the standard library, map and flatMap are methods of List.
-  def map[A,B](as: List[A])(f: A => B): List[B] = {
+  def map[A, B](as: List[A])(f: A => B): List[B] = {
     @tailrec
     def loop(as: List[A], res: List[B])(f: A => B): List[B] = as match {
       case Nil => reverse(res)
@@ -252,9 +252,26 @@ object MyModule {
     loop(as, List())(f)
   }
 
+  //Exercise 3.19
+  //Write a function filter that removes elements from a list unless they satisfy a given predicate.
+  // Use it to remove all odd numbers from a List[Int].
+  def filter[A](as: List[A])(f: A => Boolean): List[A] = {
+    @tailrec
+    def loop(as: List[A], res: List[A])(f: A => Boolean): List[A] = as match {
+      case Nil => reverse(res)
+      case h :: t if f(h) => loop(t, h :: res)(f)
+      case h :: t if !f(h) => loop(t, res)(f)
+    }
+
+    loop(as, List())(f)
+  }
+
+
   def main(args: Array[String]): Unit = {
 
-    assert(map(List(1,2))(a=> a+1) == List(2,3))
+    assert(filter(List(1, 2, 3, 4))(a => a % 2 == 0) == List(2, 4))
+
+    assert(map(List(1, 2))(a => a + 1) == List(2, 3))
 
     assert(listOfDoubleToListOfString(List(0, 1)) == List("0.0", "1.0"))
     assert(listOfDoubleToListOfString(List(0)) == List("0.0"))
