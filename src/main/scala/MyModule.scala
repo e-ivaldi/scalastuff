@@ -300,6 +300,18 @@ object MyModule {
     loop(l1, l2, List())
   }
 
+  //Exercise 3.23
+  // Generalize the function you just wrote so that it’s not specific to integers or addition.
+  // Name your generalized function zipWith.
+  def zipWith[A](l1: List[A], l2: List[A])(f: (A, A) => A): List[A] = {
+    def loop(l1: List[A], l2: List[A], res: List[A])(f: (A, A) => A): List[A] = (l1, l2) match {
+      case (Nil, Nil) => reverse(res)
+      case (h1 :: t1, h2 :: t2) => loop(t1, t2, f(h1, h2) :: res)(f)
+    }
+
+    loop(l1, l2, List())(f)
+  }
+
   def main(args: Array[String]): Unit = {
 
     assert(sumLists(List(1, 2, 3), List(4, 5, 6)) == List(5, 7, 9))
