@@ -189,8 +189,14 @@ object MyModule {
 
   //Exercise 3.14
   //Implement append in terms of either foldLeft or foldRight.
+  def append[A](l1: List[A], l2: List[A] ) : List[A] = {
+    foldRight(l1, l2)((a, b) => a::b)
+  }
 
   def main(args: Array[String]): Unit = {
+
+    assert(append(List(), List(1)) == List(1))
+    assert(append(List(1,2,3), List(4)) == List(1,2,3,4))
 
     assert(foldRightInTermsOfFoldLeft(List(1, 2, 3), List[Integer]())((a, b) => a :: b) == List[Integer](1, 2, 3))
     assert(foldLeftInTermsOfFoldRight(List(1, 2, 3), List[Integer]())((a, b) => a :: b) == List[Integer](3, 2, 1))
