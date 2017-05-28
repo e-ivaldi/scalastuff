@@ -132,6 +132,21 @@ object MyModule {
     case _ => println("mul"); a * b
   })
 
+  // Exercise 3.9
+  def length[A](as: List[A]): Int = {
+    foldRight(as, 0)((a, b) => (a, b) match {
+      case (Nil, _) if (b == 0) => 0
+      case _ => b + 1
+    })
+  }
+
+  //Exercise 3.10
+  @tailrec
+  def foldLeft[A, B](as: List[A], z: B)(f: (A, B) => B): B = as match {
+    case Nil => z
+    case x :: xs => val t = f(x,z); foldLeft(xs,t)(f)
+  }
+
   def main(args: Array[String]): Unit = {
     println(formatResult("abs", -5, abs))
     println(formatResult("factorial", 5, factorial))
@@ -158,5 +173,15 @@ object MyModule {
     assert(init(List(1, 2, 3, 4)) == List(1, 2, 3))
 
     product3(List(1D, 2D, 3D, 0.0, 5D, 6D, 7D, 8D, 9D, 10D))
+
+    println(length(List(1, 2, 3, 4, 5)))
+    assert(length(List()) == 0);
+    assert(length(List(1)) == 1);
+    assert(length(List(1, 2)) == 2);
+    assert(length(List(1, 2, 3, Nil, 5)) == 5);
+
+    assert(foldLeft(List(), 0)((_,b) => b) == 0)
+    assert(foldLeft(List(1), 0)((a,b) => a+b) == 1)
+    assert(foldLeft(List(1,2,3), 0)((a,b) => a+b) == 6)
   }
 }
