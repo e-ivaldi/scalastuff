@@ -126,7 +126,7 @@ object MyModule {
 
   // Exercise 3.7
   // It doesn't seem so
-  def product3(ints: List[Double]): Double =
+  def productTest(ints: List[Double]): Double =
   foldRight(ints, 1.0)((a, b) => a match {
     case 0.0 => println("nan"); Double.NaN
     case _ => println("mul"); a * b
@@ -144,44 +144,57 @@ object MyModule {
   @tailrec
   def foldLeft[A, B](as: List[A], z: B)(f: (A, B) => B): B = as match {
     case Nil => z
-    case x :: xs => val t = f(x,z); foldLeft(xs,t)(f)
+    case x :: xs => val t = f(x, z); foldLeft(xs, t)(f)
+  }
+
+  //Exercise 3.11
+  def sum3(ints: List[Int]): Int = foldLeft(ints, 0)((a, b) => a + b)
+
+  def product3(ints: List[Double]): Double = foldLeft(ints, 1.0)((a, b) => a * b)
+
+  //Exercise 3.12
+  def reverse[A](as: List[A]): List[A] = {
+    foldLeft(as, List[A]())((a, b) => a :: b)
   }
 
   def main(args: Array[String]): Unit = {
-    println(formatResult("abs", -5, abs))
-    println(formatResult("factorial", 5, factorial))
 
-    val asc = (x: Int, y: Int) => y > x
-    assert(isSorted(Array(1, 2, 3, 4), asc))
+    assert(reverse(List(1, 2,3)) == List(3,2,1))
 
-    assert(removeFirstElement(List(1, 2, 3, 4, 5)) == List(2, 3, 4, 5))
-    assert(removeFirstElement(List(1)) == List())
-    assert(removeFirstElement(List()) == List())
+    assert(foldLeft(List(), 0)((_, b) => b) == 0)
+    assert(foldLeft(List(1), 0)((a, b) => a + b) == 1)
+    assert(foldLeft(List(1, 2, 3), 0)((a, b) => a + b) == 6)
 
-    assert(setHead(1, List()) == List(1))
-    assert(setHead(1, List(2)) == List(1))
-    assert(setHead(1, List(2, 3)) == List(1, 3))
+    assert(length(List()) == 0)
+    assert(length(List(1)) == 1)
+    assert(length(List(1, 2)) == 2)
+    assert(length(List(1, 2, 3, Nil, 5)) == 5)
+
+    productTest(List(1D, 2D, 3D, 0.0, 5D, 6D, 7D, 8D, 9D, 10D))
+
+    assert(init(List(1, 2, 3, 4)) == List(1, 2, 3))
+
+    assert(dropWhile(List(1, 2), (x: Int) => x % 2 == 1) == List(2))
+    assert(dropWhile(List(1, 2, 3, 4), (x: Int) => x < 2) == List(2, 3, 4))
 
     assert(drop(List(), 100) == List())
     assert(drop(List(1, 2, 3), 2) == List(3))
     assert(drop(List(1, 2, 3), 3) == List())
     assert(drop(List(1, 2, 3), -1) == List(1, 2, 3))
 
-    assert(dropWhile(List(1, 2), (x: Int) => x % 2 == 1) == List(2))
-    assert(dropWhile(List(1, 2, 3, 4), (x: Int) => x < 2) == List(2, 3, 4))
+    assert(setHead(1, List()) == List(1))
+    assert(setHead(1, List(2)) == List(1))
+    assert(setHead(1, List(2, 3)) == List(1, 3))
 
-    assert(init(List(1, 2, 3, 4)) == List(1, 2, 3))
+    assert(removeFirstElement(List(1, 2, 3, 4, 5)) == List(2, 3, 4, 5))
+    assert(removeFirstElement(List(1)) == List())
+    assert(removeFirstElement(List()) == List())
 
-    product3(List(1D, 2D, 3D, 0.0, 5D, 6D, 7D, 8D, 9D, 10D))
+    val asc = (x: Int, y: Int) => y > x
+    assert(isSorted(Array(1, 2, 3, 4), asc))
 
-    println(length(List(1, 2, 3, 4, 5)))
-    assert(length(List()) == 0);
-    assert(length(List(1)) == 1);
-    assert(length(List(1, 2)) == 2);
-    assert(length(List(1, 2, 3, Nil, 5)) == 5);
+    println(formatResult("abs", -5, abs))
+    println(formatResult("factorial", 5, factorial))
 
-    assert(foldLeft(List(), 0)((_,b) => b) == 0)
-    assert(foldLeft(List(1), 0)((a,b) => a+b) == 1)
-    assert(foldLeft(List(1,2,3), 0)((a,b) => a+b) == 6)
   }
 }
