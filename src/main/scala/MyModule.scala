@@ -312,6 +312,28 @@ object MyModule {
     loop(l1, l2, List())(f)
   }
 
+  //bit more flexible
+  def zipWith[A,B,C](l1: List[A], l2: List[B])(f: (A, B) => C): List[C] = {
+    def loop(l1: List[A], l2: List[B], res: List[C])(f: (A, B) => C): List[C] = (l1, l2) match {
+      case (Nil, Nil) => reverse(res)
+      case (h1 :: t1, h2 :: t2) => loop(t1, t2, f(h1, h2) :: res)(f)
+    }
+
+    loop(l1, l2, List())(f)
+  }
+
+  //Exercise 3.24
+  // Hard: As an example, implement hasSubsequence for
+  // checking whether a List contains another List as a subsequence.
+  // For instance, List(1,2,3,4) would have List(1,2), List(2,3), and List(4) as subsequences, among others.
+  // You may have some difficulty finding a concise purely functional implementation that is also
+  //           efficient. That’s okay. Implement the function however comes most naturally.
+  // We’ll return to this implementation in chapter 5 and hopefully improve on it.
+  // Note: Any two values x and y can be compared for equality in Scala using the expression x == y.
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
+    false
+  }
+
   def main(args: Array[String]): Unit = {
 
     assert(sumLists(List(1, 2, 3), List(4, 5, 6)) == List(5, 7, 9))
