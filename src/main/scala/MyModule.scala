@@ -166,25 +166,11 @@ object MyModule {
   // it lets us implement foldRight tail-recursively,
   // which means it works even for large lists without overflowing the stack.
   def foldLeftInTermsOfFoldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = {
-    @tailrec
-    def loop(as: List[A], res: List[A]): B = as match {
-      case Nil => foldRight(res, z)(f)
-      case h :: t => loop(t, h :: res)
-    }
-
-    loop(as, List[A]())
-    // or foldRight(as.reverse, z)(f)
+    foldRight(reverse(as), z)(f)
   }
 
   def foldRightInTermsOfFoldLeft[A, B](as: List[A], z: B)(f: (A, B) => B): B = {
-    @tailrec
-    def loop(as: List[A], res: List[A]): B = as match {
-      case Nil => foldLeft(res, z)(f)
-      case h :: t => loop(t, h :: res)
-    }
-
-    loop(as, List[A]())
-    // or foldLeft(as.reverse, z)(f)
+    foldLeft(reverse(as), z)(f)
   }
 
   //Exercise 3.14
@@ -292,6 +278,7 @@ object MyModule {
   //Write a function that accepts two lists and constructs a new list by adding corresponding elements.
   // For example, List(1,2,3) and List(4,5,6) become List(5,7,9).
   def sumLists(l1: List[Int], l2: List[Int]): List[Int] = {
+    @tailrec
     def loop(l1: List[Int], l2: List[Int], res: List[Int]): List[Int] = (l1, l2) match {
       case (Nil, Nil) => reverse(res)
       case (h1 :: t1, h2 :: t2) => loop(t1, t2, (h1 + h2) :: res)
@@ -304,6 +291,7 @@ object MyModule {
   // Generalize the function you just wrote so that it’s not specific to integers or addition.
   // Name your generalized function zipWith.
   def zipWith[A](l1: List[A], l2: List[A])(f: (A, A) => A): List[A] = {
+    @tailrec
     def loop(l1: List[A], l2: List[A], res: List[A])(f: (A, A) => A): List[A] = (l1, l2) match {
       case (Nil, Nil) => reverse(res)
       case (h1 :: t1, h2 :: t2) => loop(t1, t2, f(h1, h2) :: res)(f)
@@ -313,7 +301,8 @@ object MyModule {
   }
 
   //bit more flexible
-  def zipWith[A,B,C](l1: List[A], l2: List[B])(f: (A, B) => C): List[C] = {
+  def zipWith[A, B, C](l1: List[A], l2: List[B])(f: (A, B) => C): List[C] = {
+    @tailrec
     def loop(l1: List[A], l2: List[B], res: List[C])(f: (A, B) => C): List[C] = (l1, l2) match {
       case (Nil, Nil) => reverse(res)
       case (h1 :: t1, h2 :: t2) => loop(t1, t2, f(h1, h2) :: res)(f)
