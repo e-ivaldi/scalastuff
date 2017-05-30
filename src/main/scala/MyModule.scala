@@ -101,6 +101,7 @@ object MyModule {
     case Nil => Nil
     case _ :: _ :: Nil => l match {
       case x :: _ => List(x)
+      case Nil => Nil
     }
     case h :: t => h :: init(t)
   }
@@ -246,7 +247,7 @@ object MyModule {
     def loop(as: List[A], res: List[A])(f: A => Boolean): List[A] = as match {
       case Nil => reverse(res)
       case h :: t if f(h) => loop(t, h :: res)(f)
-      case h :: t if !f(h) => loop(t, res)(f)
+      case _ :: t => loop(t, res)(f)
     }
 
     loop(as, List())(f)
@@ -294,6 +295,8 @@ object MyModule {
     @tailrec
     def loop(l1: List[A], l2: List[A], res: List[A])(f: (A, A) => A): List[A] = (l1, l2) match {
       case (Nil, Nil) => reverse(res)
+      case (_, Nil) => Nil
+      case (Nil, _) => Nil
       case (h1 :: t1, h2 :: t2) => loop(t1, t2, f(h1, h2) :: res)(f)
     }
 
@@ -305,6 +308,8 @@ object MyModule {
     @tailrec
     def loop(l1: List[A], l2: List[B], res: List[C])(f: (A, B) => C): List[C] = (l1, l2) match {
       case (Nil, Nil) => reverse(res)
+      case (_, Nil) => Nil
+      case (Nil, _) => Nil
       case (h1 :: t1, h2 :: t2) => loop(t1, t2, f(h1, h2) :: res)(f)
     }
 
@@ -324,6 +329,8 @@ object MyModule {
     def loop(sup: List[A], sub: List[A], res: Int): Int = (sup, sub) match {
       // empty sub list
       case (_, Nil) => res
+      // empty super list
+      case (Nil, _) => res
       // end of sub list iteration
       case (suph :: _, subh :: Nil) if suph == subh => res + 1
       // end of super list iteration
@@ -331,14 +338,25 @@ object MyModule {
       // match: move both lists forward
       case (suph :: supt, subh :: subt) if suph == subh => loop(supt, subt, res + 1)
       // no match: move super list forward
-      case (suph :: supt, subh :: _) if suph != subh => loop(supt, sub, 0)
+      case (_ :: supt, _ :: _) => loop(supt, sub, 0)
     }
 
     loop(sup, sub, 0) == length(sub)
   }
 
+  sealed trait Tree[+A]
+
+  case class Leaf[A](value: A) extends Tree[A]
+
+  case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
+
+  //Exercise 3.25
+  //Write a function size that counts the number of nodes (leaves and branches) in a tree.
+
   def main(args: Array[String]): Unit = {
 
+    assert(hasSubsequence(List(), List()))
+    assert(!hasSubsequence(List(), List(1)))
     assert(!hasSubsequence(List(1, 2, 3, 4), List(1, 2, 3, 5)))
     assert(!hasSubsequence(List(1, 2, 3, 4), List(5)))
     assert(!hasSubsequence(List(1, 2, 3, 4), List(4, 3)))
