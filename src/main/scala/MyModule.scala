@@ -301,7 +301,7 @@ object MyModule {
   }
 
   //bit more flexible
-  def zipWith[A, B, C](l1: List[A], l2: List[B])(f: (A, B) => C): List[C] = {
+  def zipWith2[A, B, C](l1: List[A], l2: List[B])(f: (A, B) => C): List[C] = {
     @tailrec
     def loop(l1: List[A], l2: List[B], res: List[C])(f: (A, B) => C): List[C] = (l1, l2) match {
       case (Nil, Nil) => reverse(res)
@@ -320,10 +320,39 @@ object MyModule {
   // We’ll return to this implementation in chapter 5 and hopefully improve on it.
   // Note: Any two values x and y can be compared for equality in Scala using the expression x == y.
   def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
-    false
+    @tailrec
+    def loop(sup: List[A], sub: List[A], res: Int): Int = (sup, sub) match {
+      // empty sub list
+      case (_, Nil) => res
+      // end of sub list iteration
+      case (suph :: _, subh :: Nil) if suph == subh => res + 1
+      // end of super list iteration
+      case (_ :: Nil, _ :: _) => res
+      // match: move both lists forward
+      case (suph :: supt, subh :: subt) if suph == subh => loop(supt, subt, res + 1)
+      // no match: move super list forward
+      case (suph :: supt, subh :: _) if suph != subh => loop(supt, sub, 0)
+    }
+
+    loop(sup, sub, 0) == length(sub)
   }
 
   def main(args: Array[String]): Unit = {
+
+    assert(!hasSubsequence(List(1, 2, 3, 4), List(1, 2, 3, 5)))
+    assert(!hasSubsequence(List(1, 2, 3, 4), List(5)))
+    assert(!hasSubsequence(List(1, 2, 3, 4), List(4, 3)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List(3, 4)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List(2, 3, 4)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List(2, 3)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List(1, 2, 3, 4)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List(1, 2, 3)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List(1, 2)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List(4)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List(3)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List(2)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List(1)))
+    assert(hasSubsequence(List(1, 2, 3, 4), List()))
 
     assert(sumLists(List(1, 2, 3), List(4, 5, 6)) == List(5, 7, 9))
 
